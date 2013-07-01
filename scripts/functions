@@ -390,7 +390,7 @@ udevd_modprobe() {
 		UDEVD_COMMAND=/usr/sbin/udevd
 	elif [ -x /usr/bin/udevd ]; then
 		# For future forks with merged /usr/bin
-		UDEVD_COMMAND=/usr/sbin/udevd
+		UDEVD_COMMAND=/usr/bin/udevd
 	else
 		echo "Unable to find udevd binary"
 		return 1
