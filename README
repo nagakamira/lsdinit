@@ -2,7 +2,7 @@ Maintained fork of initialization and rc scripts for Arch Linux.
 
 Primary changes:
 ------------------
-    * Support of udev-fork (https://bitbucket.org/braindamaged/udev/src).
+    * Support of udev-fork and eudev.
     * Perfectly commented rc.conf.
     * Easy kernel modules blacklisting via rc.conf.
     * Fully transparent bootup proccess without using systemd-reinvented-wheels.
