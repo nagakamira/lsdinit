@@ -7,7 +7,7 @@ DIRS := \
 	/etc/profile.d \
 	/usr/lib/initscripts \
 	/usr/lib/tmpfiles.d \
-	/usr/sbin \
+	/usr/bin \
 	/usr/share/bash-completion/completions \
 	/usr/share/zsh/site-functions \
 	/usr/share/man/man5 \
@@ -51,7 +51,7 @@ install: installdirs doc
 	install -m644 -t $(DESTDIR)/etc/logrotate.d misc/bootlog
 	install -m644 -t $(DESTDIR)/etc/rc.d scripts/functions
 	install -m755 -t $(DESTDIR)/etc/rc.d $(DAEMONS)
-	install -m755 -t $(DESTDIR)/usr/sbin tools/rc.d
+	install -m755 -t $(DESTDIR)/usr/bin tools/rc.d
 	install -m755 -t $(DESTDIR)/etc/profile.d misc/read_locale.sh
 	install -m644 -t $(DESTDIR)/usr/share/man/man5 $(filter %.5, $(MAN_PAGES))
 	install -m644 -t $(DESTDIR)/usr/share/man/man8 $(filter %.8, $(MAN_PAGES))
