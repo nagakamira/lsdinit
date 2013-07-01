@@ -388,6 +388,9 @@ udevd_modprobe() {
 	elif [ -x /usr/sbin/udevd ]; then
 		# Try to use udev-fork
 		UDEVD_COMMAND=/usr/sbin/udevd
+	elif [ -x /usr/bin/udevd ]; then
+		# For future forks with merged /usr/bin
+		UDEVD_COMMAND=/usr/sbin/udevd
 	else
 		echo "Unable to find udevd binary"
 		return 1

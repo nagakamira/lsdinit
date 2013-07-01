@@ -114,7 +114,13 @@ if [[ -x /run/initramfs/shutdown ]]; then
 	pivot_root . oldroot
 
 	# reexec init
-	/oldroot/sbin/init u
+	if [ -x /oldroot/sbin/init ]; then
+		/oldroot/sbin/init u
+	elif [ -x /oldroot/usr/bin/init ]; then
+		/oldroot/usr/bin/init u
+	else
+		echo "init not found"
+	fi
 
 	# run /shutdown in the new root
 	exec chroot . /shutdown $action </dev/console >/dev/console 2>&1
