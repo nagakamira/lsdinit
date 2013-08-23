@@ -229,19 +229,20 @@ while (( $# )); do
 	case $1 in
 		--create) CREATE=1 ;;
 		--remove) REMOVE=1 ;;
+		*) break ;;
 	esac
 	shift
 done
 
 if (( !(CREATE + REMOVE) )); then
-	printf 'usage: %s [--create] [--remove]\n' "${0##*/}"
+	printf 'usage: %s [--create] [--remove] [FILES...]\n' "${0##*/}"
 	exit 1
 fi
 
 # directories declared later in the tmpfiles_d array will override earlier
 # directories, on a per file basis.
 # Example: `/etc/tmpfiles.d/foo.conf' supersedes `/usr/lib/tmpfiles.d/foo.conf'.
-for path in "${@:-${tmpfiles_d[@]}}"; do
+for path in "${tmpfiles_d[@]}"; do
 	[[ -f $path ]] && fragments[${path##*/}]=${path%/*}
 done
 
@@ -253,6 +254,11 @@ trap '(( ++error ))' ERR
 # `/run/tmpfiles/foo.conf' will always be read after `/etc/tmpfiles.d/bar.conf'
 while read -d '' fragment; do
 	LINENUM=0
+
+	if [[ -z ${fragments[$fragment]} ]]; then
+		printf 'warning: %s does not found\n' "$fragment"
+		continue
+	fi
 
 	printf -v FILE '%s/%s' "${fragments[$fragment]}" "$fragment"
 
@@ -290,7 +296,7 @@ while read -d '' fragment; do
 
 		"_${line[@]}"
 	done <"$FILE"
-done < <(printf '%s\0' "${!fragments[@]}" | sort -z)
+done < <(printf '%s\0' "${@:-${!fragments[@]}}" | sort -z)
 
 exit $error
 
