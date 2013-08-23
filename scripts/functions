@@ -734,7 +734,7 @@ bootlogd_stop() {
 ###############################
 # Hooks can be used to include custom code in various places in the rc.* scripts
 #
-# Define a hook function in a functions.d file using:
+# To define a hook function, create a file with any name in functions.d containing:
 #  function_name() {
 #    ...
 #  }
@@ -742,7 +742,7 @@ bootlogd_stop() {
 # It is allowed to register several hook functions for the same hook
 # Is is also allowed to register the same hook function for several hooks
 #
-# Currently, the following hooks exist:
+# Functions can be created for the following hooks:
 # sysinit_start: at the beginning of rc.sysinit
 # multi_start: at the beginning of rc.multi
 # single_start: at the beginning of rc.single
@@ -750,18 +750,20 @@ bootlogd_stop() {
 # sysinit_end: at the end of rc.sysinit
 # multi_end: at the end of rc.multi
 # single_end: at the end of rc.single
-# sysinit_udevlaunched: after udev has been launched in rc.sysinit
-# single_udevlaunched: after udev has been launched in rc.single
-# sysinit_udevsettled: after uevents have settled in rc.sysinit
-# single_udevsettled: after uevents have settled in rc.single
+# sysinit_udevlaunched: after udev has been launched in rc.sysinit (called from functions)
+# single_udevlaunched: after udev has been launched in rc.single (called from functions)
+# sysinit_udevsettled: after uevents have settled in rc.sysinit (called from functions)
+# single_udevsettled: after uevents have settled in rc.single (called from functions)
+# sysinit_prefsck: before local filesystems are checked in rc.sysinit
+# sysinit_postfsck: after local filesystems are checked in rc.sysinit
 # sysinit_premount: before local filesystems are mounted, but after root is mounted read-write in rc.sysinit
-# sysinit_postmount: after local filesystems are mounted
+# sysinit_postmount: after local filesystems are mounted in rc.sysinit
 # shutdown_prekillall: before all processes are being killed in rc.shutdown
 # single_prekillall: before all processes are being killed in rc.single
 # shutdown_postkillall: after all processes have been killed in rc.shutdown
 # single_postkillall: after all processes have been killed in rc.single
-# shutdown_preumount: after last filesystem write, but before filesystems are unmounted
-# shutdown_postumount: after filesystems are unmounted
+# shutdown_preumount: after last filesystem write, but before filesystems are unmounted in rc.shutdown
+# shutdown_postumount: after filesystems are unmounted in rc.shutdown
 # shutdown_poweroff: directly before powering off in rc.shutdown
 #
 # Declare add_hook and run_hook as read-only to prevent overwriting them.
