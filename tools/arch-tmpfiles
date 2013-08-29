@@ -61,6 +61,28 @@ relabel() {
 	done
 }
 
+parse_age() {
+	local seconds=0
+	local numbers=(${1//[^0-9]/ })
+	local units=(${1//[0-9]/ })
+
+	for (( i = 0; i < ${#numbers[@]}; i++ )); do
+		if [ "${units[i]}" == "m" ] || [ "${units[i]}" == "min" ]; then
+			(( seconds += numbers[i] * 60 ))
+		elif [ "${units[i]}" == "h" ]; then
+			(( seconds += numbers[i] * 3600 ))
+		elif [ "${units[i]}" == "d" ]; then
+			(( seconds += numbers[i] * 86400 ))
+		elif [ "${units[i]}" == "w" ]; then
+			(( seconds += numbers[i] * 604800 ))
+		else
+			(( seconds += numbers[i] ))
+		fi
+	done
+
+	echo $seconds
+}
+
 _f() {
 	# Create a file if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
@@ -93,17 +115,30 @@ _F() {
 
 _d() {
 	# Create a directory if it doesn't exist yet
-	local path=$1 mode=$2 uid=$3 gid=$4
-
-	(( CREATE )) || return 0
+	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
 
 	if ! checkparams 4 "$@"; then
 		warninvalid
 		return
 	fi
 
-	if [[ ! -d "$path" ]]; then
-		install -d -m"$mode" -o"$uid" -g"$gid" "$path"
+	if (( CLEAN )); then
+		if [[ $age ]] && [[ -d "$path" ]]; then
+			local age=$(parse_age $5)
+			local current_time=$(date +%s)
+			local mod_time=$(stat -c %Y "$path")
+			if (( (current_time - mod_time) > age )); then
+				for file in $(find -P "$path" -mindepth 1 | sort -r); do
+					rm -fd "$file"
+				done
+			fi
+		fi
+	fi
+
+	if (( CREATE )); then
+		if [[ ! -d "$path" ]]; then
+			install -d -m"$mode" -o"$uid" -g"$gid" "$path"
+		fi
 	fi
 }
 
@@ -229,13 +264,14 @@ while (( $# )); do
 	case $1 in
 		--create) CREATE=1 ;;
 		--remove) REMOVE=1 ;;
+		--clean) CLEAN=1 ;;
 		*) break ;;
 	esac
 	shift
 done
 
-if (( !(CREATE + REMOVE) )); then
-	printf 'usage: %s [--create] [--remove] [FILES...]\n' "${0##*/}"
+if (( !(CREATE + REMOVE + CLEAN) )); then
+	printf 'usage: %s [--create] [--remove] [--clean] [FILES...]\n' "${0##*/}"
 	exit 1
 fi
 
