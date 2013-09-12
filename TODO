@@ -1,1 +1,2 @@
 * Implement parser for new crypttab format.
+* arch-tmpfiles: proper handling of nested exclude rules (for example: x /dir-*; X /dir-*/tmp)
