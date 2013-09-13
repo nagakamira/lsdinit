@@ -290,6 +290,16 @@ process_lines ()
 
 		[[ "${line[0]}" != $actions ]] && continue
 
+		# fall back on defaults when parameters are passed as '-'
+		if [[ ${line[2]} = '-' ]]; then
+			case ${line[0]} in
+				p|f|F) line[2]=0644 ;;
+				d|D) line[2]=0755 ;;
+			esac
+		fi
+		[[ ${line[3]} = '-' ]] && line[3]='root'
+		[[ ${line[4]} = '-' ]] && line[4]='root'
+
 		"_${line[@]}"
 	done < <(printf '%s\n' "${lines[@]}")
 }
@@ -366,16 +376,6 @@ while read -d '' fragment; do
 			warninvalid
 			continue
 		fi
-
-		# fall back on defaults when parameters are passed as '-'
-		if [[ ${line[2]} = '-' ]]; then
-			case ${line[0]} in
-				p|f|F) line[2]=0644 ;;
-				d|D) line[2]=0755 ;;
-			esac
-		fi
-		[[ ${line[3]} = '-' ]] && line[3]='root'
-		[[ ${line[4]} = '-' ]] && line[4]='root'
 
 		(( ++TOTALNUM ))
 		lines[$TOTALNUM]="${line[@]}"
