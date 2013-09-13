@@ -6,7 +6,7 @@
 #
 
 warninvalid() {
-	printf "arch-tmpfiles: ignoring invalid entry on line %d of \`%s'\n" "$LINENUM" "$FILE"
+	printf "%s:line %d: ignoring invalid entry\n" "${files[$TOTALNUM]}" "${linenums[$TOTALNUM]}"
 	(( ++error ))
 } >&2
 
@@ -290,8 +290,6 @@ process_lines ()
 
 		[[ "${line[0]}" != $actions ]] && continue
 
-		LINENUM=${linenums[$TOTALNUM]}
-		FILE="${files[$TOTALNUM]}"
 		"_${line[@]}"
 	done < <(printf '%s\n' "${lines[@]}")
 }
