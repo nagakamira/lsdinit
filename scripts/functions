@@ -718,8 +718,7 @@ umount_all() {
 }
 
 remove_leftover() {
-	#status 'Removing leftover files' systemd-tmpfiles --create --remove --clean
-	status 'Removing leftover files' /usr/lib/initscripts/arch-tmpfiles --create --remove
+	status 'Removing leftover files' /usr/lib/initscripts/arch-tmpfiles --create --remove --clean
 }
 
 bootlogd_stop() {
