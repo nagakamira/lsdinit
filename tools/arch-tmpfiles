@@ -12,7 +12,7 @@ warninvalid() {
 
 checkparams() {
 	local parmreq=$1; shift
-	local path=$1 mode=$2 uid=$3 gid=$4
+	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
 
 	# parmcount must be >= parmreq
 	if (( $# < parmreq )); then
@@ -36,6 +36,14 @@ checkparams() {
 	# don't try to resolve numeric IDs in case they don't exist
 	if [[ $gid ]]; then
 		if [[ $gid != +([0-9]) ]] && ! getent group "$gid" >/dev/null; then
+			return 1
+		fi
+	fi
+
+	# age must be list of numerics separated by the following postfixes:
+	# s, sec, m, min, h, d, w
+	if [[ $age && $age != '-' ]]; then
+		if [[ ! $age =~ ^([0-9]+(s|sec|m|min|h|d|w)?)+$ ]]; then
 			return 1
 		fi
 	fi
