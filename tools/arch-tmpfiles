@@ -173,9 +173,7 @@ _D() {
 		find "$path" -mindepth 1 -maxdepth 1 -xdev -exec rm -rf {} +
 	fi
 
-	if (( CREATE )); then
-		install -d -m"$mode" -o"$uid" -g"$gid" "$path"
-	fi
+	_d "$@"
 }
 
 _p() {
@@ -364,7 +362,6 @@ while read -d '' fragment; do
 	printf -v FILE '%s/%s' "${fragments[$fragment]}" "$fragment"
 
 	### FILE FORMAT ###
-	# XXX: We ignore the final 'Age' parameter
 	# 0    1              2    3    4    5
 	# Type Path           Mode UID  GID  Age
 	# d    /run/user      0755 root root 10d
