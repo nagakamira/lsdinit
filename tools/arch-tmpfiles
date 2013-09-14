@@ -105,8 +105,6 @@ _f() {
 	# Create a file if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	(( CREATE )) || return 0
-
 	if ! checkparams 4 "$@"; then
 		warninvalid
 		return
@@ -120,8 +118,6 @@ _f() {
 _F() {
 	# Create or truncate a file
 	local path=$1 mode=$2 uid=$3 gid=$4
-
-	(( CREATE )) || return 0
 
 	if ! checkparams 4 "$@"; then
 		warninvalid
@@ -180,8 +176,6 @@ _p() {
 	# Create a named pipe (FIFO) if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	(( CREATE )) || return 0
-
 	if ! checkparams 4 "$@"; then
 		warninvalid
 		return
@@ -230,8 +224,6 @@ _r() {
 	local path
 	local -a paths=($1)
 
-	(( REMOVE )) || return 0
-
 	if ! checkparams 1 "$@"; then
 		warninvalid
 		return
@@ -252,8 +244,6 @@ _R() {
 	local path
 	local -a paths=($1)
 
-	(( REMOVE )) || return 0
-
 	if ! checkparams 1 "$@"; then
 		warninvalid
 		return
@@ -271,8 +261,6 @@ _z() {
 	local -a paths=($1)
 	local mode=$2 uid=$3 gid=$4
 
-	(( CREATE )) || return 0
-
 	relabel "$@"
 }
 
@@ -280,8 +268,6 @@ _Z() {
 	# Recursively set ownership, access mode and relabel security context of a
 	# path and all its subdirectories (if it is a directory). Lines of this type
 	# accept shell-style globs in place of normal path names.
-
-	(( CREATE )) || return 0
 
 	CHOPTS=-R relabel "$@"
 }
@@ -392,7 +378,9 @@ done < <(printf '%s\0' "${@:-${!fragments[@]}}" | sort -z)
 # Fill exclude list first
 (( CLEAN )) && process_lines "[xX]"
 
-process_lines "[^xX]"
+(( CREATE )) && process_lines "[fFpzZ]"
+(( REMOVE )) && process_lines "[rR]"
+process_lines "[dD]"
 
 exit $error
 
