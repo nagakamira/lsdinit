@@ -20,13 +20,15 @@ checkparams() {
 	fi
 
 	# mode must be valid octal and 3 or 4 digits
-	if [[ $mode && ! $mode =~ ^[0-7]{3,4}$ ]]; then
-		return 1
+	if [[ $mode != '-' ]]; then
+		if [[ ! $mode =~ ^[0-7]{3,4}$ ]]; then
+			return 1
+		fi
 	fi
 
 	# uid must be numeric or a valid user name
 	# don't try to resolve numeric IDs in case they don't exist
-	if [[ $uid ]]; then
+	if [[ $uid != '-' ]]; then
 		if [[ $uid != +([0-9]) ]] && ! getent passwd "$uid" >/dev/null; then
 			return 1
 		fi
@@ -34,7 +36,7 @@ checkparams() {
 
 	# gid must be numeric or a valid group name
 	# don't try to resolve numeric IDs in case they don't exist
-	if [[ $gid ]]; then
+	if [[ $gid != '-' ]]; then
 		if [[ $gid != +([0-9]) ]] && ! getent group "$gid" >/dev/null; then
 			return 1
 		fi
@@ -43,7 +45,7 @@ checkparams() {
 	# age must be list of numerics separated by the following postfixes:
 	# s, sec, m, min, h, d, w
 	# also it can be prefixed by '~'
-	if [[ $age && $age != '-' ]]; then
+	if [[ $age != '-' ]]; then
 		if [[ ! $age =~ ^~?([0-9]+(s|sec|m|min|h|d|w)?)+$ ]]; then
 			return 1
 		fi
@@ -159,7 +161,7 @@ _d() {
 	fi
 
 	if (( CLEAN )); then
-		if [[ $age ]] && [[ -d "$path" ]]; then
+		if [[ $age != '-' ]] && [[ -d "$path" ]]; then
 			cleanup_dir "$path" "$age"
 		fi
 	fi
@@ -296,6 +298,12 @@ process_lines ()
 		(( ++TOTALNUM ))
 
 		[[ "${line[0]}" != $actions ]] && continue
+
+		# fill empty parameters
+		[[ "${line[2]}" ]] || line[2]='-'
+		[[ "${line[3]}" ]] || line[3]='-'
+		[[ "${line[4]}" ]] || line[4]='-'
+		[[ "${line[5]}" ]] || line[5]='-'
 
 		# fall back on defaults when parameters are passed as '-'
 		if [[ ${line[2]} = '-' ]]; then
