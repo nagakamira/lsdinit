@@ -312,8 +312,11 @@ process_lines ()
 				d|D) line[2]=0755 ;;
 			esac
 		fi
-		[[ ${line[3]} = '-' ]] && line[3]='root'
-		[[ ${line[4]} = '-' ]] && line[4]='root'
+
+		if [[ "${line[0]}" = [pfFdD] ]]; then
+			[[ ${line[3]} = '-' ]] && line[3]='root'
+			[[ ${line[4]} = '-' ]] && line[4]='root'
+		fi
 
 		"_${line[@]}"
 	done < <(printf '%s\n' "${lines[@]}")
