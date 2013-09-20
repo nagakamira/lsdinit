@@ -11,6 +11,7 @@ warninvalid() {
 } >&2
 
 checkparams() {
+	shift
 	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
 
 	# path cannot be empty
@@ -56,11 +57,6 @@ checkparams() {
 relabel() {
 	local -a paths=($1)
 	local mode=$2 uid=$3 gid=$4
-
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
 
 	for path in "${paths[@]}"; do
 		if [[ -e $path ]]; then
@@ -130,11 +126,6 @@ _f() {
 	# Create a file if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
-
 	if [[ ! -e $path ]]; then
 		install -m"$mode" -o"$uid" -g"$gid" /dev/null "$path"
 	fi
@@ -144,22 +135,12 @@ _F() {
 	# Create or truncate a file
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
-
 	install -m"$mode" -o"$uid" -g"$gid" /dev/null "$path"
 }
 
 _d() {
 	# Create a directory if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
-
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
 
 	if (( CLEAN )); then
 		if [[ $age != '-' ]] && [[ -d "$path" ]]; then
@@ -178,11 +159,6 @@ _D() {
 	# Create or empty a directory
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
-
 	if [[ -d $path ]] && (( REMOVE )); then
 		find "$path" -mindepth 1 -maxdepth 1 -xdev -exec rm -rf {} +
 	fi
@@ -193,11 +169,6 @@ _D() {
 _p() {
 	# Create a named pipe (FIFO) if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
-
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
 
 	if [[ ! -p "$path" ]]; then
 		mkfifo -m$mode "$path"
@@ -212,11 +183,6 @@ _x() {
 	# globs in place of of normal path names.
 	local path=$1
 
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
-
 	EXCLUDE_LIST+=("$path*(/*)")
 }
 
@@ -227,11 +193,6 @@ _X() {
 	# shell-style globs in place of normal path names.
 	local path=$1
 
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
-
 	EXCLUDE_LIST+=("$path")
 }
 
@@ -241,11 +202,6 @@ _r() {
 	# globs in place of normal path names.
 	local path
 	local -a paths=($1)
-
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
 
 	for path in "${paths[@]}"; do
 		if [[ -f $path ]]; then
@@ -261,11 +217,6 @@ _R() {
 	# Lines of this type accept shell-style globs in place of normal path names.
 	local path
 	local -a paths=($1)
-
-	if ! checkparams "$@"; then
-		warninvalid
-		return
-	fi
 
 	for path in "${paths[@]}"; do
 		[[ -d $path ]] && rm -rf --one-file-system "$path"
@@ -305,6 +256,12 @@ process_lines ()
 		[[ "${line[3]}" ]] || line[3]='-'
 		[[ "${line[4]}" ]] || line[4]='-'
 		[[ "${line[5]}" ]] || line[5]='-'
+
+		# skip invalid entries
+		if ! checkparams "${line[@]}"; then
+			warninvalid
+			continue
+		fi
 
 		# fall back on defaults when parameters are passed as '-'
 		if [[ ${line[2]} = '-' ]]; then
