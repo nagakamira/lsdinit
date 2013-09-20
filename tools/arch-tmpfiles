@@ -70,6 +70,8 @@ relabel() {
 			[[ $mode != '-' ]] && chmod $CHOPTS "$mode" "$path"
 		fi
 	done
+
+	return 0
 }
 
 parse_age() {
