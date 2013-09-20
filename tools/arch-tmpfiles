@@ -11,11 +11,10 @@ warninvalid() {
 } >&2
 
 checkparams() {
-	local parmreq=$1; shift
 	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
 
-	# parmcount must be >= parmreq
-	if (( $# < parmreq )); then
+	# path cannot be empty
+	if [[ -z "$path" ]]; then
 		return 1
 	fi
 
@@ -58,7 +57,7 @@ relabel() {
 	local -a paths=($1)
 	local mode=$2 uid=$3 gid=$4
 
-	if ! checkparams 4 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -131,7 +130,7 @@ _f() {
 	# Create a file if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams 4 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -145,7 +144,7 @@ _F() {
 	# Create or truncate a file
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams 4 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -157,7 +156,7 @@ _d() {
 	# Create a directory if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
 
-	if ! checkparams 4 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -179,7 +178,7 @@ _D() {
 	# Create or empty a directory
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams 4 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -195,7 +194,7 @@ _p() {
 	# Create a named pipe (FIFO) if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
 
-	if ! checkparams 4 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -213,7 +212,7 @@ _x() {
 	# globs in place of of normal path names.
 	local path=$1
 
-	if ! checkparams 1 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -228,7 +227,7 @@ _X() {
 	# shell-style globs in place of normal path names.
 	local path=$1
 
-	if ! checkparams 1 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -243,7 +242,7 @@ _r() {
 	local path
 	local -a paths=($1)
 
-	if ! checkparams 1 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
@@ -263,7 +262,7 @@ _R() {
 	local path
 	local -a paths=($1)
 
-	if ! checkparams 1 "$@"; then
+	if ! checkparams "$@"; then
 		warninvalid
 		return
 	fi
