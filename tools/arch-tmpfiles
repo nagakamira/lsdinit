@@ -42,8 +42,9 @@ checkparams() {
 
 	# age must be list of numerics separated by the following postfixes:
 	# s, sec, m, min, h, d, w
+	# also it can be prefixed by '~'
 	if [[ $age && $age != '-' ]]; then
-		if [[ ! $age =~ ^([0-9]+(s|sec|m|min|h|d|w)?)+$ ]]; then
+		if [[ ! $age =~ ^~?([0-9]+(s|sec|m|min|h|d|w)?)+$ ]]; then
 			return 1
 		fi
 	fi
@@ -101,6 +102,27 @@ in_list() {
 	return 1
 }
 
+cleanup_dir() {
+	local path=$1 age=$2
+	local depth=1
+
+	# keep first level
+	if [[ ${age:0:1} == '~' ]]; then
+		depth=2
+		age=${age#'~'}
+	fi
+
+	local age=$(parse_age $age)
+	local current_time=$(date +%s)
+	local mod_time=$(stat -c %Y "$path")
+
+	if (( (current_time - mod_time) > age )); then
+		for file in $(find -P "$path" -mindepth $depth | sort -r); do
+			! in_list "$file" && rm -fd "$file"
+		done
+	fi
+}
+
 _f() {
 	# Create a file if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
@@ -138,14 +160,7 @@ _d() {
 
 	if (( CLEAN )); then
 		if [[ $age ]] && [[ -d "$path" ]]; then
-			local age=$(parse_age $5)
-			local current_time=$(date +%s)
-			local mod_time=$(stat -c %Y "$path")
-			if (( (current_time - mod_time) > age )); then
-				for file in $(find -P "$path" -mindepth 1 | sort -r); do
-					! in_list "$file" && rm -fd "$file"
-				done
-			fi
+			cleanup_dir "$path" "$age"
 		fi
 	fi
 
