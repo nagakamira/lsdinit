@@ -6,7 +6,9 @@
 #
 
 warninvalid() {
-	printf "%s:line %d: ignoring invalid entry\n" "${files[$TOTALNUM]}" "${linenums[$TOTALNUM]}"
+	local file=$1 linenum=$2
+
+	printf "%s:line %d: ignoring invalid entry\n" "$file" "$linenum"
 	(( ++error ))
 } >&2
 
@@ -259,7 +261,7 @@ process_lines ()
 
 		# skip invalid entries
 		if ! checkparams "${line[@]}"; then
-			warninvalid
+			warninvalid "${files[$TOTALNUM]}" "${linenums[$TOTALNUM]}"
 			continue
 		fi
 
@@ -348,7 +350,7 @@ while read -d '' fragment; do
 
 		# whine about invalid entries
 		if ! type -t _${line[0]} >/dev/null; then
-			warninvalid
+			warninvalid "$FILE" "$LINENUM"
 			continue
 		fi
 
