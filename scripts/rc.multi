@@ -9,8 +9,7 @@
 run_hook multi_start
 
 # Load sysctl config files
-#/usr/lib/systemd/systemd-sysctl
-/usr/lib/initscripts/arch-sysctl
+status "Configuring kernel parameters" sysctl -q --system
 
 # Load additional binary formats
 #/usr/lib/systemd/systemd-binfmt

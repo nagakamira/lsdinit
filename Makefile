@@ -37,7 +37,6 @@ MAN_PAGES := \
 TOOLS := \
 	tools/arch-binfmt \
 	tools/arch-modules \
-	tools/arch-sysctl \
 	tools/arch-tmpfiles
 
 all: doc
