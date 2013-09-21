@@ -20,7 +20,7 @@ else
 fi
 
 # check there is file to load
-(( ${#binfmt_d[@]} > 0 )) || exit 1
+(( ${#binfmt_d[@]} > 0 )) || exit 0
 
 # mount binfmt_misc if api filesystem is missing
 mountpoint -q /proc/sys/fs/binfmt_misc ||

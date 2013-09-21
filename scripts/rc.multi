@@ -12,8 +12,7 @@ run_hook multi_start
 status "Configuring kernel parameters" sysctl -q --system
 
 # Load additional binary formats
-#/usr/lib/systemd/systemd-binfmt
-/usr/lib/initscripts/arch-binfmt
+status "Configure additional binary formats" /usr/lib/initscripts/arch-binfmt
 
 # Start daemons
 for daemon in "${DAEMONS[@]}"; do
