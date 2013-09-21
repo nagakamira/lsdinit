@@ -56,8 +56,8 @@ install: installdirs doc
 	install -m644 -t $(DESTDIR)/usr/share/man/man8 $(filter %.8, $(MAN_PAGES))
 	install -m755 -t $(DESTDIR)/usr/lib/initscripts $(TOOLS)
 	install -m644 conf/tmpfiles.conf $(DESTDIR)/usr/lib/tmpfiles.d/initscripts.conf
-	install -m644 -T complection/bash-completion $(DESTDIR)/usr/share/bash-completion/completions/rc.d
-	install -m644 -T complection/zsh-completion $(DESTDIR)/usr/share/zsh/site-functions/_rc.d
+	install -m644 -T completions/bash-completion $(DESTDIR)/usr/share/bash-completion/completions/rc.d
+	install -m644 -T completions/zsh-completion $(DESTDIR)/usr/share/zsh/site-functions/_rc.d
 
 %.5: %.5.txt
 	a2x -d manpage -f manpage $<
