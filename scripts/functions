@@ -640,7 +640,7 @@ fsck_all() {
 		FORCEFSCK="-f"
 	elif [[ -f /fastboot ]] || in_array fastboot $(< /proc/cmdline); then
 		return 0
-	elif [[ -e /run/initramfs/root-fsck ]]; then
+	elif findmnt / --options rw &>/dev/null; then
 		IGNORE_MOUNTED="-M"
 	fi
 

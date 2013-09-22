@@ -28,13 +28,6 @@ mkdir -p /dev/{pts,shm}
 mountpoint -q /dev/pts || mount /dev/pts &>/dev/null || mount -t devpts devpts /dev/pts -o mode=0620,gid=5,nosuid,noexec
 mountpoint -q /dev/shm || mount /dev/shm &>/dev/null || mount -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
 
-if [[ ! -e /run/initramfs/root-fsck ]]; then
-	# remount root ro to allow for fsck later on, we remount now to
-	# make sure nothing can open files rw on root which would block a remount
-	findmnt / --options ro &>/dev/null ||
-		status "Mounting root read-only" mount -o remount,ro /
-fi
-
 # log all console messages
 bootlogd -p /run/bootlogd.pid
 
