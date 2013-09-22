@@ -408,7 +408,11 @@ udevd_modprobe() {
 	# Load modules from the MODULES array or modules-load.d
 	stat_busy "Loading user-specified modules"
 	if (( ${#MODULES[*]} )); then
-                modprobe -ab "${MODULES[@]/!*/}"
+		local -a modules=(${MODULES[@]/!*/})
+
+		if [[ ${modules[@]} =~ [^\ ] ]]; then
+			modprobe -ab "${modules[@]}"
+		fi
 	else
 		/usr/lib/initscripts/arch-modules
 	fi
