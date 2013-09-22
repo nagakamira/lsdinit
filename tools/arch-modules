@@ -21,7 +21,7 @@ else
 fi
 
 # check there is file to load
-(( ${#modules_d[@]} > 0 )) || exit 1
+(( ${#modules_d[@]} > 0 )) || exit 0
 
 # files declared later in the modules_d array will override earlier
 # Example: `/etc/modules-load.d/foo.conf' supersedes `/usr/lib/modules-load.d/foo.conf'.
