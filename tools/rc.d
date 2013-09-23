@@ -90,7 +90,7 @@ case $action in
 	;;
 	list)
 		# list take all daemons by default
-		[[ -z $daemons ]] && for d in *; do have_daemon "$d" && daemons+=("$d"); done
+		[[ -z $daemons ]] && for d in *; do [[ -f /etc/rc.d/"$d" && -x /etc/rc.d/"$d" ]] && daemons+=("$d"); done
 		filter_daemons
 		for daemon in "${daemons[@]}"; do
 			# print running / stopped satus
