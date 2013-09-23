@@ -34,8 +34,6 @@ filter_daemons() {
 	for daemon in "${daemons[@]}"; do
 		# check if daemons is valid
 		if ! have_daemon "$daemon"; then
-			printf "${C_FAIL}:: ${C_DONE}Daemon script ${C_FAIL}${daemon}${C_DONE} does \
-not exist or is not executable.${C_CLEAR}\n" >&2
 			exit 2
 		fi
 		# check filter
