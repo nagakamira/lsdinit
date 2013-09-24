@@ -13,10 +13,10 @@ RANDOM_SEED=/var/lib/misc/random-seed
 [[ -z $LANG ]] && . /etc/profile.d/read_locale.sh
 
 if [[ $1 == "start" ]]; then
-	if [[ $STARTING ]]; then
-		echo "A daemon is starting another daemon; this is unlikely to work as intended."
+	if [[ $PARENT_DAEMON ]]; then
+		echo "NOTE: '${0##*/}' started as dependence of '$PARENT_DAEMON' but will be stopped first during shutdown"
 	else
-		export STARTING=1
+		export PARENT_DAEMON=${0##*/}
 	fi
 fi
 
