@@ -93,7 +93,7 @@ case $action in
 		[[ -z $daemons ]] && for d in *; do [[ -f /etc/rc.d/"$d" && -x /etc/rc.d/"$d" ]] && daemons+=("$d"); done
 		filter_daemons
 		for daemon in "${daemons[@]}"; do
-			# print running / stopped satus
+			# print running / stopped status
 			if ! ck_daemon "$daemon"; then
 				s_status="${C_OTHER}[${C_DONE}STARTED${C_OTHER}]"
 			else

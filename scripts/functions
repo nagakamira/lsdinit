@@ -384,7 +384,7 @@ udevd_modprobe() {
 	# This is used to determine which hooks to run.
 
 	# Modules prefixed with ! should be blacklisted
-	blacklist=(${MODULES[@]##[^!]*})
+	local blacklist=(${MODULES[@]##[^!]*})
 	[[ $blacklist ]] && create_blacklist ${blacklist[@]/!/}
 
 	if [ -x /usr/lib/systemd/systemd-udevd ]; then
