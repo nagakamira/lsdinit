@@ -3,7 +3,7 @@
 #
 
 # sanitize PATH (will be overridden later when /etc/profile is sourced but is useful for udev)
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export PATH="/usr/local/bin:/usr/bin"
 
 # clear the TZ envvar, so daemons always respect /etc/localtime
 unset TZ
@@ -389,9 +389,6 @@ udevd_modprobe() {
 
 	if [ -x /usr/lib/systemd/systemd-udevd ]; then
 		UDEVD_COMMAND=/usr/lib/systemd/systemd-udevd
-	elif [ -x /usr/sbin/udevd ]; then
-		# Try to use udev-fork
-		UDEVD_COMMAND=/usr/sbin/udevd
 	elif [ -x /usr/bin/udevd ]; then
 		# For future forks with merged /usr/bin
 		UDEVD_COMMAND=/usr/bin/udevd

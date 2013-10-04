@@ -114,7 +114,7 @@ case $action in
 		filter_daemons
 		# set same environment variables as init
 		runlevel=$(/usr/bin/runlevel)
-		ENV=('PATH=/bin:/usr/bin:/sbin:/usr/sbin'
+		ENV=('PATH=/usr/bin'
 			"PREVLEVEL=${runlevel%% *}"
 			"RUNLEVEL=${runlevel##* }"
 			"CONSOLE=${CONSOLE:-/dev/console}"
