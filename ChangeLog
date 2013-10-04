@@ -1,0 +1,56 @@
+Version 2013.10.1:
+
+ General:
+  * Migrating to /usr/bin. Thank to Maxim Devaev.
+  * Due to changes in mkinitcpio 0.15 the support of /run/initramfs/root-fsck
+  and automatic remounting to read-only has been removed. Now root fs is checked only
+  when it is already mounted to ro.
+
+ Tools:
+  * arch-tmpfiles: Added ability to specify which *.conf files should be
+  processed.
+  * arch-tmpfiles: Implemented support of clean action and of Age parameter.
+  Thank to Connor Behan.
+  * arch-tmpfiles: Implemented support of exclude list. Thank to Connor Behan.
+  * arch-tmpfiles: A bit more readable warnings.
+  * arch-tmpfiles: Small optimization and code cleanup.
+  * arch-tmpfiles: Fixed handling of empty and "dashed" parameters.
+  * arch-tmpfiles: Fixed wrong behavior of z and Z actions when mode/owner
+  parameters contains '-'.
+  * arch-modules: Fixed FAIL message when modules-load.d dirs are empty.
+  * arch-sysctl was replaced with 'sysctl --system'.
+
+ Misc:
+  * Updated description of available hooks. Thank to Connor Behan.
+  * Added status messages for sysctl and arch-binfmt calls during systemd
+  boot.
+  * Added warning about missed daemon scripts.
+  * More informative warning about starting of a daemon by other daemon. Thank
+  to Connor Behan.
+  * Fixed modprobe fail when MODULES contains blacklisted items only.
+  * Removed arch-daemons and all systemd targets and services.
+
+Version 2012.12.1 (since 2012.10.1):
+
+ General:
+  * Now system utils/daemons are called directly, without using of systemd
+  tools.
+  * Added support of udev-fork and eudev.
+
+ Settings:
+  * Restored localization, modules, hostname and network_persist settings in
+  default rc.conf.
+  * Restored ability to blacklist a kernel module via rc.conf.
+  * Updated rc.conf(5) man page.
+  * Removed "settingname is deprecated" warning for HOSTNAME, HARDWARECLOCK and
+  TIMEZONE settings.
+  * Systemd configs (such as login.conf) are used only if the corresponding
+  settings in rc.conf is empty/commented.
+
+ Tools:
+  * Restored arch-tmpfiles, arch-modules, arch-sysctl and arch-binfmt helper
+  scripts.
+
+ Misc:
+  * Removed redundant binfmt_misc mounting.
+
