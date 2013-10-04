@@ -7,4 +7,5 @@ Primary changes:
     * Easy kernel modules blacklisting via rc.conf.
     * Fully transparent bootup proccess without using systemd-reinvented-wheels.
 
-See https://bitbucket.org/TZ86/initscripts-fork/src.
+Project page: https://bitbucket.org/TZ86/initscripts-fork
+Additional scripts for Arch Linux packages: https://bitbucket.org/TZ86/arch-rcscripts
