@@ -1,6 +1,7 @@
 Version 2013.10.2:
 
  Misc:
+  * Fixed git fatal message during build.
   * Restored systemd related stuff.
 
 Version 2013.10.1:

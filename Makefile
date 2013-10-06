@@ -1,4 +1,4 @@
-VER  := $(shell git describe)
+VER  := 2013.10.2
 
 DIRS := \
 	/etc/rc.d \
