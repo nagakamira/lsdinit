@@ -8,6 +8,10 @@ DIRS := \
 	/usr/lib/initscripts \
 	/usr/lib/tmpfiles.d \
 	/usr/bin \
+	/usr/lib/systemd/system-generators \
+	/usr/lib/systemd/system/multi-user.target.wants \
+	/usr/lib/systemd/system/shutdown.target.wants \
+	/usr/lib/systemd/system/sysinit.target.wants \
 	/usr/share/bash-completion/completions \
 	/usr/share/zsh/site-functions \
 	/usr/share/man/man5 \
@@ -33,11 +37,17 @@ DAEMONS := \
 MAN_PAGES := \
 	man/rc.conf.5 \
 	man/rc.d.8 \
+	man/arch-daemons.8
 
 TOOLS := \
 	tools/arch-binfmt \
 	tools/arch-modules \
 	tools/arch-tmpfiles
+
+UNITS := \
+	systemd/arch-daemons.target \
+	systemd/rc-local.service \
+	systemd/rc-local-shutdown.service
 
 all: doc
 
@@ -55,9 +65,15 @@ install: installdirs doc
 	install -m644 -t $(DESTDIR)/usr/share/man/man5 $(filter %.5, $(MAN_PAGES))
 	install -m644 -t $(DESTDIR)/usr/share/man/man8 $(filter %.8, $(MAN_PAGES))
 	install -m755 -t $(DESTDIR)/usr/lib/initscripts $(TOOLS)
+	install -m755 -t $(DESTDIR)/usr/lib/systemd/system-generators systemd/arch-daemons
+	install -m644 -t $(DESTDIR)/usr/lib/systemd/system $(UNITS)
 	install -m644 conf/tmpfiles.conf $(DESTDIR)/usr/lib/tmpfiles.d/initscripts.conf
 	install -m644 -T completions/bash-completion $(DESTDIR)/usr/share/bash-completion/completions/rc.d
 	install -m644 -T completions/zsh-completion $(DESTDIR)/usr/share/zsh/site-functions/_rc.d
+	ln -s /dev/null ${DESTDIR}/usr/lib/systemd/system/netfs.service
+	ln -s ../rc-local.service ${DESTDIR}/usr/lib/systemd/system/multi-user.target.wants/
+	ln -s ../arch-daemons.target ${DESTDIR}/usr/lib/systemd/system/multi-user.target.wants/
+	ln -s ../rc-local-shutdown.service ${DESTDIR}/usr/lib/systemd/system/shutdown.target.wants/
 
 %.5: %.5.txt
 	a2x -d manpage -f manpage $<
