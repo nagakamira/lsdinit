@@ -326,6 +326,12 @@ trap '(( ++error ))' ERR
 while read -d '' fragment; do
 	LINENUM=0
 
+	# make sure that a fragment contains only a base filename
+	if [[ "$fragment" = /* ]] && [[ -f "$fragment" ]]; then
+		fragments[${fragment##*/}]=${fragment%/*}
+		fragment=${fragment##*/}
+	fi
+
 	if [[ -z ${fragments[$fragment]} ]]; then
 		printf 'warning: %s does not found\n' "$fragment"
 		continue
