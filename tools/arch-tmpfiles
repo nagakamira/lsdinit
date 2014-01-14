@@ -6,7 +6,7 @@
 #
 
 warninvalid() {
-	local file=$1 linenum=$2
+	local file=${1:-${files[$TOTALNUM]}} linenum=${2:-${linenums[$TOTALNUM]}}
 
 	printf "%s:line %d: ignoring invalid entry\n" "$file" "$linenum"
 	(( ++error ))
@@ -268,7 +268,7 @@ process_lines ()
 
 		# skip invalid entries
 		if ! checkparams "${line[@]}"; then
-			warninvalid "${files[$TOTALNUM]}" "${linenums[$TOTALNUM]}"
+			warninvalid
 			continue
 		fi
 
