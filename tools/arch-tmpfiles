@@ -243,6 +243,13 @@ _Z() {
 	CHOPTS=-R relabel "$@"
 }
 
+_m() {
+	# If the specified file path exists, adjust its access mode, group and user to the
+	# specified values. If it does not exist, do nothing.
+
+	relabel "$@"
+}
+
 process_lines ()
 {
 	local actions="$1"
@@ -370,7 +377,7 @@ done < <(printf '%s\0' "${@:-${!fragments[@]}}" | sort -z)
 # Fill exclude list first
 (( CLEAN )) && process_lines "[xX]"
 
-(( CREATE )) && process_lines "[fFpzZ]"
+(( CREATE )) && process_lines "[fFpzZm]"
 (( REMOVE )) && process_lines "[rR]"
 process_lines "[dD]"
 
