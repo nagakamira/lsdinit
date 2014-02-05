@@ -6,9 +6,9 @@
 #
 
 warninvalid() {
-	local file=${1:-${files[$TOTALNUM]}} linenum=${2:-${linenums[$TOTALNUM]}}
+	local description=$1 file=${2:-${files[$TOTALNUM]}} linenum=${3:-${linenums[$TOTALNUM]}}
 
-	printf "%s:line %d: ignoring invalid entry\n" "$file" "$linenum"
+	printf "%s:line %d: ignoring invalid entry: %s\n" "$file" "$linenum" "$description"
 	(( ++error ))
 } >&2
 
@@ -18,12 +18,14 @@ checkparams() {
 
 	# path cannot be empty
 	if [[ -z "$path" ]]; then
+		warninvalid "missed path"
 		return 1
 	fi
 
 	# mode must be valid octal and 3 or 4 digits
 	if [[ $mode != '-' ]]; then
 		if [[ ! $mode =~ ^[0-7]{3,4}$ ]]; then
+			warninvalid "invalid mode '$mode'"
 			return 1
 		fi
 	fi
@@ -32,6 +34,7 @@ checkparams() {
 	# don't try to resolve numeric IDs in case they don't exist
 	if [[ $uid != '-' ]]; then
 		if [[ $uid != +([0-9]) ]] && ! getent passwd "$uid" >/dev/null; then
+			warninvalid "unknown user '$uid'"
 			return 1
 		fi
 	fi
@@ -40,6 +43,7 @@ checkparams() {
 	# don't try to resolve numeric IDs in case they don't exist
 	if [[ $gid != '-' ]]; then
 		if [[ $gid != +([0-9]) ]] && ! getent group "$gid" >/dev/null; then
+			warninvalid "unknown group '$gid'"
 			return 1
 		fi
 	fi
@@ -49,6 +53,7 @@ checkparams() {
 	# also it can be prefixed by '~'
 	if [[ $age != '-' ]]; then
 		if [[ ! $age =~ ^~?([0-9]+(s|sec|m|min|h|d|w)?)+$ ]]; then
+			warninvalid "invalid age '$age'"
 			return 1
 		fi
 	fi
@@ -268,7 +273,6 @@ process_lines ()
 
 		# skip invalid entries
 		if ! checkparams "${line[@]}"; then
-			warninvalid
 			continue
 		fi
 
@@ -363,7 +367,7 @@ while read -d '' fragment; do
 
 		# whine about invalid entries
 		if ! type -t _${line[0]} >/dev/null; then
-			warninvalid "$FILE" "$LINENUM"
+			warninvalid "unknown action '${line[0]}'" "$FILE" "$LINENUM"
 			continue
 		fi
 
