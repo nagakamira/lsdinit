@@ -16,12 +16,6 @@ checkparams() {
 	shift
 	local path=$1 mode=$2 uid=$3 gid=$4 age=$5
 
-	# path cannot be empty
-	if [[ -z "$path" ]]; then
-		warninvalid "missed path"
-		return 1
-	fi
-
 	# mode must be valid octal and 3 or 4 digits
 	if [[ $mode != '-' ]]; then
 		if [[ ! $mode =~ ^[0-7]{3,4}$ ]]; then
@@ -368,6 +362,12 @@ while read -d '' fragment; do
 		# whine about invalid entries
 		if ! type -t _${line[0]} >/dev/null; then
 			warninvalid "unknown action '${line[0]}'" "$FILE" "$LINENUM"
+			continue
+		fi
+
+		# path cannot be empty
+		if [[ -z "${line[1]}" ]]; then
+			warninvalid "missed path" "$FILE" "$LINENUM"
 			continue
 		fi
 

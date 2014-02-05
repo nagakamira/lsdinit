@@ -4,6 +4,7 @@ Version 2014.01.1:
   * arch-tmpfiles: Now user can specify a full path to *.conf file.
   * arch-tmpfiles: Implemented support of 'm' action. Thank to Connor Behan.
   * arch-tmpfiles: More informative error messages.
+  * arch-tmpfiles: Fixed check for empty path.
 
 Version 2013.10.2:
 
