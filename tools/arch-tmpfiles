@@ -381,9 +381,9 @@ done < <(printf '%s\0' "${@:-${!fragments[@]}}" | sort -z)
 # Fill exclude list first
 (( CLEAN )) && process_lines "[xX]"
 
+process_lines "[dD]"
 (( CREATE )) && process_lines "[fFpzZm]"
 (( REMOVE )) && process_lines "[rR]"
-process_lines "[dD]"
 
 exit $error
 
