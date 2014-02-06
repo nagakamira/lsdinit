@@ -5,6 +5,7 @@ Version 2014.01.1:
   * arch-tmpfiles: Implemented support of 'm' action. Thank to Connor Behan.
   * arch-tmpfiles: More informative error messages.
   * arch-tmpfiles: Fixed check for empty path.
+  * arch-tmpfiles: Fixed processing of lines without trailing '\n'.
 
 Version 2013.10.2:
 

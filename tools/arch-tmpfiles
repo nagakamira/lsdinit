@@ -351,7 +351,7 @@ while read -d '' fragment; do
 
 	# omit read's -r flag to honor escapes here, so that whitespace can be
 	# escaped for paths. We will _not_ honor quoted paths.
-	while read -a line; do
+	while read -a line || [[ -n "${line[@]}" ]]; do
 		(( ++LINENUM ))
 
 		# skip over comments and empty lines
