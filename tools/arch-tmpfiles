@@ -243,8 +243,8 @@ _Z() {
 }
 
 _m() {
-	# If the specified file path exists, adjust its access mode, group and user to the
-	# specified values. If it does not exist, do nothing.
+	# If the specified file path exists, adjust its access mode, group and user to
+	# the specified values. If it does not exist, do nothing.
 
 	relabel "$@"
 }
