@@ -249,6 +249,19 @@ _m() {
 	relabel "$@"
 }
 
+_w() {
+	# Write the argument parameter to a file, if the file exists. Lines of this
+	# type accept shell-style globs in place of normal path names. The argument
+	# parameter will be written without a trailing newline.
+	local path
+	local -a paths=($1)
+	local argument="$6"
+
+	for path in "${paths[@]}"; do
+		[[ -f $path ]] && echo -n "$argument" > "$path"
+	done
+}
+
 process_lines ()
 {
 	local actions="$1"
@@ -382,7 +395,7 @@ done < <(printf '%s\0' "${@:-${!fragments[@]}}" | sort -z)
 (( CLEAN )) && process_lines "[xX]"
 
 process_lines "[dD]"
-(( CREATE )) && process_lines "[fFpzZm]"
+(( CREATE )) && process_lines "[fFpzZmw]"
 (( REMOVE )) && process_lines "[rR]"
 
 exit $error
