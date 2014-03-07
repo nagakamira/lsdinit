@@ -521,7 +521,7 @@ do_unlock_legacy() {
 do_unlock_systemd() {
 	local name=$1 device=$2 password=$3 options=$4 failed=0
 
-	if [ -x /usr/lib/systemd/systemd-cryptsetup ]; then
+	if [ ! -x /usr/lib/systemd/systemd-cryptsetup ]; then
 		echo "Unable to find systemd-cryptsetup binary"
 		return 1
 	fi

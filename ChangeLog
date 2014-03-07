@@ -1,3 +1,8 @@
+Version 2014.03.1:
+
+ Other:
+  * Fixed systemd-cryptsetup detection.
+
 Version 2014.02.1:
 
  Tools:
