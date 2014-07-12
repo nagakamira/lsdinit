@@ -358,7 +358,7 @@ kill_all() {
 
 print_welcome() {
 	# see os-release(5)
-	. /etc/os-release
+	. /usr/lib/os-release
 
 	echo " "
 	printhl "${PRETTY_NAME}\n"
