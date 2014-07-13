@@ -363,7 +363,8 @@ while read -d '' fragment; do
 	# d    /run/user      0755 root root 10d
 
 	# omit read's -r flag to honor escapes here, so that whitespace can be
-	# escaped for paths. We will _not_ honor quoted paths.
+	# escaped for paths. We will _not_ honor quoted paths. Also make sure that
+	# last line will be processed even if it does not contain terminating '\n'.
 	while read -a line || [[ -n "${line[@]}" ]]; do
 		(( ++LINENUM ))
 
