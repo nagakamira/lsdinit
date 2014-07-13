@@ -262,6 +262,15 @@ _w() {
 	done
 }
 
+_L() {
+	# Create a symlink if it does not exist yet.
+	local path=$1 source=$6
+
+	if [[ ! -e "$path" && -e "$source" ]]; then
+		ln -s "$source" "$path"
+	fi
+}
+
 process_lines ()
 {
 	local actions="$1"
@@ -406,7 +415,7 @@ done < <(printf '%s\0' "${@:-${!fragments[@]}}" | sort -z)
 (( CLEAN )) && process_lines "[xX]"
 
 process_lines "[dD]"
-(( CREATE )) && process_lines "[fFpzZmw]"
+(( CREATE )) && process_lines "[fFpzZmwL]"
 (( REMOVE )) && process_lines "[rR]"
 
 exit $error
