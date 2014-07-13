@@ -85,7 +85,7 @@ udevd_modprobe sysinit
 
 # this must be done after udev has loaded the KMS modules
 #status 'Configuring virtual consoles' /usr/lib/systemd/systemd-vconsole-setup
-if [[ ${LOCALE,,} =~ utf ]]; then
+if [[ ${LOCALE,,} =~ utf || $LOCALE == C ]]; then
         stat_busy "Setting Consoles to UTF-8 mode"
                 # UTF-8 consoles are default since 2.6.24 kernel
                 # this code is needed not only for older kernels,
