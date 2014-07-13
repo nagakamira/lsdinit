@@ -1,5 +1,8 @@
 Version 2014.07.1:
 
+ General:
+  * Main boot script (rc.sysinit) is always using 'C' locale.
+
  Misc:
   * Fixed working with filesystem>=2014.07.
 
