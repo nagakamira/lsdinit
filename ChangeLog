@@ -4,6 +4,9 @@ Version 2014.07.1:
   * Main boot script (rc.sysinit) is always using 'C' locale.
   * Virtual Consoles switched to UTF-8 mode by default.
 
+ Tools:
+  * arch-tmpfiles: Implemented support of --boot option.
+
  Misc:
   * Fixed working with filesystem>=2014.07.
 
