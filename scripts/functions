@@ -723,7 +723,7 @@ umount_all() {
 }
 
 remove_leftover() {
-	status 'Removing leftover files' /usr/lib/initscripts/arch-tmpfiles --create --remove --clean
+	status 'Removing leftover files' /usr/lib/initscripts/arch-tmpfiles --create --remove --clean --boot
 }
 
 bootlogd_stop() {
