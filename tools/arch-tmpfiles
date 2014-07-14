@@ -271,6 +271,15 @@ _L() {
 	fi
 }
 
+_L+() {
+	# Create a symlink if it does not exist yet. If a file already exists where the symlink is to be created, it will be removed and be replaced by the symlink.
+	local path=$1 source=$6
+
+	if [[ -e "$source" ]]; then
+		ln -sf "$source" "$path"
+	fi
+}
+
 process_lines ()
 {
 	local actions="$1"
@@ -279,7 +288,7 @@ process_lines ()
 	while read -a line; do
 		(( ++TOTALNUM ))
 
-		[[ "${line[0]}" != $actions ]] && continue
+		[[ "${line[0]:0:1}" != $actions ]] && continue
 
 		# fill empty parameters
 		[[ "${line[2]}" ]] || line[2]='-'
