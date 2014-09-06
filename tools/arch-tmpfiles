@@ -114,13 +114,13 @@ cleanup_dir() {
 
 	local age=$(parse_age $age)
 	local current_time=$(date +%s)
-	local mod_time=$(stat -c %Y "$path")
 
-	if (( (current_time - mod_time) > age )); then
-		for file in $(find -P "$path" -mindepth $depth -depth -xdev); do
+	for file in $(find -P "$path" -mindepth $depth -depth -xdev); do
+		local mod_time=$(stat -c %Y "$file")
+		if (( (current_time - mod_time) > age )); then
 			! in_list "$file" && rm -fd "$file"
-		done
-	fi
+		fi
+	done
 }
 
 _f() {

@@ -1,5 +1,8 @@
 Version 2014.09.1:
 
+ Tools:
+  * arch-tmpfiles: Fixed cleanup action behaviour. Thank to Connor Behan.
+
 Version 2014.07.1:
 
  General:
