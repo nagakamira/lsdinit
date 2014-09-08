@@ -116,6 +116,9 @@ cleanup_dir() {
 	local current_time=$(date +%s)
 
 	for file in $(find -P "$path" -mindepth $depth -depth -xdev); do
+		# don't try to remove directories which still contains some files
+		[[ -d "$file" && $(ls -A "$file") ]] && continue
+
 		local mod_time=$(stat -c %Y "$file")
 		if (( (current_time - mod_time) > age )); then
 			! in_list "$file" && rm -fd "$file"
