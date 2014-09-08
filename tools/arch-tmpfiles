@@ -115,7 +115,7 @@ cleanup_dir() {
 	local age=$(parse_age $age)
 	local current_time=$(date +%s)
 
-	for file in $(find -P "$path" -mindepth $depth -depth -xdev); do
+	while read -d '' file; do
 		# don't try to remove directories which still contains some files
 		[[ -d "$file" && $(ls -A "$file") ]] && continue
 
@@ -123,7 +123,7 @@ cleanup_dir() {
 		if (( (current_time - mod_time) > age )); then
 			! in_list "$file" && rm -fd "$file"
 		fi
-	done
+	done < <(find -P "$path" -mindepth $depth -depth -xdev -print0)
 }
 
 _f() {
